@@ -17,6 +17,7 @@ class user implements \dao\data_object {
 	public function set_pass($_v) 		{$this->pass=$_v; return $this;}
 	public function set_displayname($_v) 	{$this->displayname=$_v; return $this;}
 
+	//
 	public function load_from_array(array $_d) {
 		foreach($this->get_property_map() as $k => $discard) {
 
@@ -24,6 +25,8 @@ class user implements \dao\data_object {
 				$this->$k=$_d[$k];
 			}
 		}
+
+		return $this;
 	}
 
 	public function get_property_map() {
