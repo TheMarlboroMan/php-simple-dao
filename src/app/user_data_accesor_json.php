@@ -2,12 +2,13 @@
 namespace app;
 
 //!Extends the user_mock_da to write the storage to a json file with each change.
-class user_json_da extends user_mock_da implements \dao\data_accesor {
+class user_data_accesor_json extends user_data_accesor_mock implements \dao\data_accesor {
 
 	private $filename=null;
 
 	public function __construct($_filename) {
 
+		parent::__construct();
 		$this->filename=$_filename;
 	}
 

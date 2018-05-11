@@ -35,10 +35,17 @@ class dao {
 		$da->delete($_do);
 	}
 
-	public function get($_type, $_strategy, array $_params=[]) {
+
+	public function retriever($_type) {
 
 		$da=$this->get_data_accesor_for($_type);
-		return $da->get($_strategy, $_params);
+		$retriever=$da->retriever();
+
+		if(!$retriever->check_validity($_type)) {
+			throw new \Exception(get_class($retriever).' is not a valid retriever for '.$_type);
+		}
+
+		return $retriever;
 	}
 
 	private function check_registered($_class) {

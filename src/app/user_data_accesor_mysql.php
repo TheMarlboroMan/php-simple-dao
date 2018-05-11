@@ -3,7 +3,9 @@ namespace app;
 
 //TODO: Transactions.
 //TODO: Prepared statements.
-class user_mysql_da implements \dao\data_accesor {
+class user_data_accesor_mysql implements \dao\data_accesor {
+
+	private $retriever=null;
 
 	public function insert(\dao\data_object $_do) {
 
@@ -52,48 +54,8 @@ class user_mysql_da implements \dao\data_accesor {
 		}
 	}
 
-	//TODO: There should actually be an intermediate layer so it honors the neccesary contract.
-	public function get($_strategy, array $_params) {
+	public function retriever() {
 
-		switch($_strategy) {
-		
-			case 'get_all': 
-				$result=[];
-				$query=mysql_query("SELECT * FROM users");
-				while($data=mysql_fetch_assoc($query)) {
-					$user=new user();
-					$result[]=$user->load_from_array($data);
-				}
-				return $result;
-			break;
-
-			case 'find_one_by_id':
-				return $this->find_by($_params, 'id', 'id');
-			break;
-
-			case 'find_one_by_username':
-				return $this->find_by($_params, 'username', 'username');
-			break;
-
-			default:
-				throw new \Exception("Cannot find strategy ".$_strategy." for user_da");
-			break;
-		}
-	}
-
-	private function find_by(array $_params, $_paramname, $_fieldname) {
-
-		if(!isset($_params[$_paramname])) {
-			throw new \Exception("cannot find ".$_paramname." in find_by_".$_fieldname);
-		}
-
-		$result=null;
-		$query=mysql_query("SELECT * FROM users WHERE ".$_fieldname."='".mysql_real_escape_string($_params[$_paramname])."';");
-		if(mysql_num_rows($query)) {
-			$result=new user();
-			$result->load_from_array(mysql_fetch_assoc($query));
-		}
-		
-		return $result;
+		return new user_retriever_mysql();
 	}
 }

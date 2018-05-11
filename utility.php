@@ -5,15 +5,15 @@ function get_dao($_type) {
 
 	switch($_type) {
 		case 'mock': 
-			$dao->register(\app\user::class, new \app\user_mock_da); 
+			$dao->register(\app\user::class, new \app\user_data_accesor_mock); 
 		break;
 		case 'json':
-			$dao->register(\app\user::class, new \app\user_json_da("user.json"));
+			$dao->register(\app\user::class, new \app\user_data_accesor_json("user.json"));
 		break;
 		case 'mysql':
 			$conn=mysql_connect('localhost', 'root', '1234');
 			mysql_select_db('oop');
-			$dao->register(\app\user::class, new \app\user_mysql_da);
+			$dao->register(\app\user::class, new \app\user_data_accesor_mysql);
 			mysql_query("TRUNCATE TABLE users");
 		break;
 		default:
@@ -44,7 +44,7 @@ function setup_data(\dao\dao $_dao) {
 //!Updates the first user.
 function update_user(\dao\dao $_dao) {
 
-	$all_users=$_dao->get(\app\user::class, 'get_all');
+	$all_users=$_dao->retriever(\app\user::class)->get_all();
 
 	if(!count($all_users)) {
 		throw new \Exception("There are no users for update_user!");
@@ -57,7 +57,7 @@ function update_user(\dao\dao $_dao) {
 //!Deletes user with id $user_id
 function delete_user(\dao\dao $_dao, $user_id) {
 
-	$user_with_id=$_dao->get(\app\user::class, 'find_one_by_id', ['id' => $user_id]);
+	$user_with_id=$_dao->retriever(\app\user::class)->find_one_by_id($user_id);
 	if(null===$user_with_id) {
 		throw new \Exception("There is no user with the id ".$user_id);
 	}
@@ -67,7 +67,7 @@ function delete_user(\dao\dao $_dao, $user_id) {
 
 function print_hannigan(\dao\dao $_dao) {
 
-	$hannigan=$_dao->get(\app\user::class, 'find_one_by_username', ['username' => 'hannigan']);
+	$hannigan=$_dao->retriever(\app\user::class)->find_one_by_username('hannigan');
 
 	if(null===$hannigan) {
 		throw new \Exception("There is no hannigan");
