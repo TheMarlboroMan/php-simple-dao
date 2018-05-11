@@ -67,44 +67,33 @@ class user_mysql_da implements \dao\data_accesor {
 				return $result;
 			break;
 
-			//TODO: This is always the same, see???
 			case 'find_one_by_id':
-
-				if(!isset($_params['id'])) {
-					throw new \Exception("find_one_by_id requires the id parameter");
-				}
-
-				$result=null;
-				$query=mysql_query("SELECT * FROM users WHERE id='".mysql_real_escape_string($_params['id'])."';");
-				if(mysql_num_rows($query)) {
-					$result=new user();
-					$result->load_from_array(mysql_fetch_assoc($query));
-				}
-				
-				return $result;
+				return $this->find_by($_params, 'id', 'id');
 			break;
 
 			case 'find_one_by_username':
-
-				if(!isset($_params['username'])) {
-					throw new \Exception("find_one_by_username requires the username parameter");
-				}
-
-				$result=null;
-
-				$result=null;
-				$query=mysql_query("SELECT * FROM users WHERE username='".mysql_real_escape_string($_params['username'])."';");
-				if(mysql_num_rows($query)) {
-					$result=new user();
-					$result->load_from_array(mysql_fetch_assoc($query));
-				}
-
-				return $result;
+				return $this->find_by($_params, 'username', 'username');
 			break;
 
 			default:
 				throw new \Exception("Cannot find strategy ".$_strategy." for user_da");
 			break;
 		}
+	}
+
+	private function find_by(array $_params, $_paramname, $_fieldname) {
+
+		if(!isset($_params[$_paramname])) {
+			throw new \Exception("cannot find ".$_paramname." in find_by_".$_fieldname);
+		}
+
+		$result=null;
+		$query=mysql_query("SELECT * FROM users WHERE ".$_fieldname."='".mysql_real_escape_string($_params[$_paramname])."';");
+		if(mysql_num_rows($query)) {
+			$result=new user();
+			$result->load_from_array(mysql_fetch_assoc($query));
+		}
+		
+		return $result;
 	}
 }

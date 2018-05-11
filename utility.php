@@ -3,7 +3,7 @@ function get_dao($_type) {
 
 	$dao=new \dao\dao();
 
-	switch($_$type) {
+	switch($_type) {
 		case 'mock': 
 			$dao->register(\app\user::class, new \app\user_mock_da); 
 		break;
@@ -25,6 +25,7 @@ function get_dao($_type) {
 }
 
 function create_user() {
+
 	$shit_data=['username' => 'dirty', 'pass' => '1234encrypted', 'displayname' => 'Dirty Harry'];
 
 	$user=new \app\user();
