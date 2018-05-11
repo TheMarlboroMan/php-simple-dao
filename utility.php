@@ -24,20 +24,18 @@ function get_dao($_type) {
 	return $dao;
 }
 
-function create_user() {
-
-	$shit_data=['username' => 'dirty', 'pass' => '1234encrypted', 'displayname' => 'Dirty Harry'];
-
-	$user=new \app\user();
-	$user->load_from_array($shit_data);
-
-	return $user;
-}
-
 function setup_data(\dao\dao $_dao) {
 
+	$data=['username' => 'dirty', 'pass' => '1234encrypted', 'displayname' => 'Dirty Harry'];
+
+	$create=function() use ($data) {
+		$user=new \app\user();
+		$user->load_from_array($data);
+		return $user;
+	};
+
 	for($i=0; $i<3; $i++) {
-		$_dao->insert(create_user());
+		$_dao->insert($create());
 	}
 }
 

@@ -9,10 +9,12 @@ try {
 	}
 
 	$dao=get_dao($argv[1]);
+
 	setup_data($dao);
 	update_user($dao);
 	delete_user($dao, 3);
 	print_hannigan($dao);
+
 	die("ok".PHP_EOL);
 }
 catch(\Exception $e) {
